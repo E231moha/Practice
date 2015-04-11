@@ -34,7 +34,7 @@ int main() {
 	Omikuji ok;  //‚¨‚Ý‚­‚¶
 	cout << "1TŠÔ•ª‚Ìè‚¢‚Å‚·B" << endl;
 	for(int i = 0; i < 7; i++) {
-		cout << "¡“ú‚©‚ç" << i << "“úŒãF" << endl;
+		cout << "¡“ú‚©‚ç" << i + 1 << "“úŒãF" << endl;
 		ok.hiku();
 	}
 }
