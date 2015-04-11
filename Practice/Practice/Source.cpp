@@ -1,4 +1,4 @@
-#include <iostream>
+ï»¿#include <iostream>
 #include <string>
 using namespace std;
 
@@ -17,16 +17,16 @@ Cat::Cat(string n) {
 }
 
 int Cat::eat() {
-	cout << "”L‚É—^‚¦‚éHŽ–‚Ì—Ê‚ð“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B" << endl;
+	cout << "çŒ«ã«ä¸Žãˆã‚‹é£Ÿäº‹ã®é‡ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚" << endl;
 	int x;
 	cin >> x;
 	Hitpoint -= x;
-	cout << "”L‚ÍHŽ–‚ð‚µ‚Ü‚µ‚½B" << endl;
+	cout << "çŒ«ã¯é£Ÿäº‹ã‚’ã—ã¾ã—ãŸã€‚" << endl;
 	return Hitpoint;
 }
 
 int Cat::naku() {
-	cout << "”L‚Í–Â‚«‚Ü‚µ‚½B" << name << endl;
+	cout << "çŒ«ã¯é³´ãã¾ã—ãŸã€‚" << name << endl;
 	Hitpoint -= 5;
 	return Hitpoint;
 }
