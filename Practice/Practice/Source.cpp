@@ -1,64 +1,84 @@
-﻿//sneko.cpp
+﻿//jimbutu_game.cpp
 #include <iostream>
-#include <string>
+#include <cstdlib>  //乱数に必要、入門１０を参照
+#include <ctime>   //乱数に必要
 using namespace std;
 
-//元祖「猫」
-class Neko {
-	string name;
+//人物、剣士や占い師などの基底クラス
+class Jimbutu {
+	int power;
 public:
-	Neko(string s);   //「Neko(string);」でも可
-	void naku() const;
-	string get_name() {
-		return name;
+	//コンストラクタ、powerを初期化
+	Jimbutu(): power(5) {}
+	int get_power() const { return power; }
+	//仕事をした後にパワーを減らす関数
+	void decr_power() {
+		power--;
+		cout << "現在のパワー：" << power << endl;
 	}
 };
 
-Neko::Neko(string s): name(s) {}
+//剣士
+class Kensi: public Jimbutu {
+public:
+	void sigoto();  //剣士の仕事、定義はクラス宣言の外で、、、
+};
 
-void Neko::naku() const {
-	cout << "にゃあ。俺様は" << name << "だ。" << endl;
+void Kensi::sigoto() {
+	//get_power()でパワーを調べ、０以下なら何もしない。
+	if(get_power() <= 0) {
+		cout << "すまん。疲れているんだ。" << endl;
+		return;  //この関数「sigoto」から抜ける。
+	}
+	cout << "俺は剣士だ。俺の剣技を見せてやる。" << endl;
+	cout << "どりゃ～。おりゃ～。そりゃ～。、、、以上。" << endl;
+	decr_power();  //Jimbutuの関数
 }
 
-class RichNeko:public Neko {
-	int sisan;
+//占い師
+class Uranaisi: public Jimbutu {
 public:
-	RichNeko(string n, int x):Neko(n), sisan(x) {}
-	int getNensyu() {
-		return sisan * 2 / 100;
-	}
+	void sigoto();  //占い師の仕事、定義はクラス宣言の外で、、、
 };
 
+void Uranaisi::sigoto() {
+	//get_power()でパワーを調べ、０以下なら何もしない。
+	if(get_power() <= 0) {
+		cout << "わしゃ～占い師じゃが、腹減って動けんよ。" << endl;
+		return;  //この関数「sigoto」から抜ける
+	}
+	cout << "私は占い師じゃ。今日のおまえの運勢を占ってやろうかの。" << endl;
+	int x = rand() % 3;
+	//上の１行は「int x;
+	//　　　　　　x=rand()%3; 」 と同じ意味です
+
+	if(x == 0) {
+		cout << "おまえの今日の運勢は最高じゃ。" << endl;
+	} else if(x == 1) {
+		cout << "今日のおまえは、まあ、普通じゃな。" << endl;
+	} else if(x == 2) {
+		cout << "今日はおまえの厄日じゃ。何もせん方がよい。" << endl;
+	}
+	decr_power();  //Jimbutuの関数
+}
+
 int main() {
-	string n;
-	int s;
-	cout << "資産家猫をメモリ上に生成します。名前を決めて入力してください。" << endl;
-	cin >> n;
-	cout << "資産を決めて入力してください。（単位：万円）" << endl;
-	cout << "（数字は半角で入力してください。）" << endl;
-	cin >> s;
-	RichNeko dora(n, s);  //資産家猫の生成
-	//無限ループ。抜けるにはユーザが1、2以外の数字を入力すればよい。
+	srand((unsigned)time(NULL));
+	Kensi hero;    //剣士ヘロの誕生
+	Uranaisi pero; //占い師ペロの誕生
+
 	while(1) {
-		cout << "どうしますか？" << endl;
-		cout << "1 鳴かす　2 年収を表示　3 やめる" << endl;
-		int ans;
-		cin >> ans;
-		if(ans == 1) {
-			//Nekoの関数nakuをSisankaNekoが使う。
-			dora.naku();
-			//Nekoのnaku()はSisankaNekoでも使えるのです。
-		} else if(ans == 2) {
-			cout << "年収は現在" << dora.getNensyu() << "万円です。" << endl;
-		}
-		//上のどれも成り立たない場合。ユーザには「3 やめる」と表示したが、
-		//1、2以外ならループを抜けるようにした。
-		else {
+		int x;
+		cout << "どうします？" << endl;
+		cout << "1 剣士に仕事をしてもらう。 2 占い師に仕事をしてもらう。 3 やめる" << endl;
+		cin >> x;
+		if(x == 1) {
+			hero.sigoto();
+		} else if(x == 2) {
+			pero.sigoto();
+		} else {
 			break;
 		}
-		//見やすさのための改行
-		cout << endl;
 	}
-
-	cout << "おしまい" << endl;
+	cout << "おしまい。" << endl;
 }
