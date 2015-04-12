@@ -9,6 +9,9 @@ class Neko {
 public:
 	Neko(string s);   //「Neko(string);」でも可
 	void naku() const;
+	string get_name() {
+		return name;
+	}
 };
 
 Neko::Neko(string s): name(s) {}
@@ -59,6 +62,7 @@ int main() {
 			//ユーザには4と入力すれば「やめる」になると表示しているが、
 			//ほかの数字も含めて上の1、2、3以外ならループを抜けるようにした。
 			//ループから抜けるにはbreak;
+			cout << dora.get_name() << endl;
 			break;
 		}
 		//見やすさのための改行
