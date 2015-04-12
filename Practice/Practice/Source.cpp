@@ -1,84 +1,82 @@
-﻿//jimbutu_game.cpp
+﻿//sbneko.cpp
 #include <iostream>
-#include <cstdlib>  //乱数に必要、入門１０を参照
-#include <ctime>   //乱数に必要
+#include <string>
 using namespace std;
 
-//人物、剣士や占い師などの基底クラス
-class Jimbutu {
-	int power;
+//元祖「猫」
+class Neko {
+	string name; //名前
 public:
-	//コンストラクタ、powerを初期化
-	Jimbutu(): power(5) {}
-	int get_power() const { return power; }
-	//仕事をした後にパワーを減らす関数
-	void decr_power() {
-		power--;
-		cout << "現在のパワー：" << power << endl;
-	}
+	Neko(string); //コンストラクタ
+	void naku() const;
 };
 
-//剣士
-class Kensi: public Jimbutu {
-public:
-	void sigoto();  //剣士の仕事、定義はクラス宣言の外で、、、
-};
+Neko::Neko(string s): name(s) {}
 
-void Kensi::sigoto() {
-	//get_power()でパワーを調べ、０以下なら何もしない。
-	if(get_power() <= 0) {
-		cout << "すまん。疲れているんだ。" << endl;
-		return;  //この関数「sigoto」から抜ける。
-	}
-	cout << "俺は剣士だ。俺の剣技を見せてやる。" << endl;
-	cout << "どりゃ～。おりゃ～。そりゃ～。、、、以上。" << endl;
-	decr_power();  //Jimbutuの関数
+void Neko::naku() const {
+	cout << "にゃあ。俺様は" << name << "だ。" << endl;
 }
 
-//占い師
-class Uranaisi: public Jimbutu {
+//「猫」の派生クラス「サラリー猫」
+class SalaryNeko: public Neko {
+	int gekkyu; //月給
 public:
-	void sigoto();  //占い師の仕事、定義はクラス宣言の外で、、、
+	SalaryNeko(string, int); //コンストラクタ
+	//年収を戻す関数。年収は月給の12倍とする。
+	int get_nensyu() const { return gekkyu * 12; }
+	//月給を1万円増やす関数
+	void syoukyu() { gekkyu++; }
+	//新しく付け加える「月給の値を戻す関数」
+	int get_gekkyu() const { return gekkyu; }
 };
 
-void Uranaisi::sigoto() {
-	//get_power()でパワーを調べ、０以下なら何もしない。
-	if(get_power() <= 0) {
-		cout << "わしゃ～占い師じゃが、腹減って動けんよ。" << endl;
-		return;  //この関数「sigoto」から抜ける
-	}
-	cout << "私は占い師じゃ。今日のおまえの運勢を占ってやろうかの。" << endl;
-	int x = rand() % 3;
-	//上の１行は「int x;
-	//　　　　　　x=rand()%3; 」 と同じ意味です
+SalaryNeko::SalaryNeko(string s, int x): Neko(s), gekkyu(x) {}  //コンストラクタ
 
-	if(x == 0) {
-		cout << "おまえの今日の運勢は最高じゃ。" << endl;
-	} else if(x == 1) {
-		cout << "今日のおまえは、まあ、普通じゃな。" << endl;
-	} else if(x == 2) {
-		cout << "今日はおまえの厄日じゃ。何もせん方がよい。" << endl;
-	}
-	decr_power();  //Jimbutuの関数
-}
+//「サラリー猫」の派生クラス「サラリー猫・ウイズ・ボーナス」。もう英語むちゃくちゃ。
+class SalaryNekoWithBonus:public SalaryNeko {
+	int bonus;  //月給の何ヶ月分かを表す
+public:
+	//コンストラクタ
+	//第1引数が名前、第2引数が月給、第3引数がボーナスを表す
+	SalaryNekoWithBonus(string, int, int);
+	//年収（月給＋ボーナス）を戻す関数
+	//SaralyNekoと同じ名前の関数、同じ名前でもよいのです。 
+	int get_nensyu() const { return get_gekkyu() * (12 + bonus); }
+};
 
+SalaryNekoWithBonus::SalaryNekoWithBonus(string s, int g, int b): SalaryNeko(s, g), bonus(b) {}
+
+//前回のmain()とほぼ同じだが、省ける中カッコを省いてみた。
 int main() {
-	srand((unsigned)time(NULL));
-	Kensi hero;    //剣士ヘロの誕生
-	Uranaisi pero; //占い師ペロの誕生
+	string name;  //名前の一時格納場所
+	int gekkyu;    //月給
+	int bonus;     //ボーナスが月給の何ヶ月分か
 
+	cout << "サラリー猫・ウイズ・ボーナスをメモリ上に生成します。\n名前を決めて入力してください。" << endl;
+	cin >> name;
+	cout << "月給を決めて入力してください。（１万円単位）" << endl;
+	cout << "（数字は半角で入力してください。）" << endl;
+	cin >> gekkyu;
+	cout << "ボーナスは月給の何ヶ月分か、入力してください。" << endl;
+	cin >> bonus;
+	SalaryNekoWithBonus dora(name, gekkyu, bonus);  //サラリー猫・ウイズ・ボーナスの生成
+	//ループ。抜けるにはユーザが1、2、3以外の数字を入力すればよいようにする。
 	while(1) {
-		int x;
-		cout << "どうします？" << endl;
-		cout << "1 剣士に仕事をしてもらう。 2 占い師に仕事をしてもらう。 3 やめる" << endl;
-		cin >> x;
-		if(x == 1) {
-			hero.sigoto();
-		} else if(x == 2) {
-			pero.sigoto();
-		} else {
+		int ans;
+		cout << "どうしますか？" << endl;
+		cout << "1 鳴かす　2 年収を表示　3 昇給　4 やめる" << endl;
+		cin >> ans;
+		if(ans == 1)
+			dora.naku();
+		else if(ans == 2)
+			cout << "年収は現在" << dora.get_nensyu() << "です。" << endl;
+		else if(ans == 3) {
+			dora.syoukyu();
+			cout << "１万円昇給しました。" << endl;
+		} else
 			break;
-		}
+		//見やすさのための改行
+		cout << endl;
 	}
-	cout << "おしまい。" << endl;
+	cout << "おしまい" << endl;
 }
