@@ -56,8 +56,8 @@ int bfs() {
 }
 
 int main(void) {
-	cout << maze[sx][sy] << endl;
-	/*int res = bfs();
-	cout << res << endl;*/
+	//cout << maze[sx][sy] << endl;
+	int res = bfs();
+	cout << res << endl;
 	return 0;
 }
