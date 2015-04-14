@@ -1,48 +1,63 @@
-﻿//gakusei_sample2.cpp
-#include <iostream>
+﻿#include <iostream>
+#include <vector>
+#include <utility>
+#include <queue>
 using namespace std;
 
-class Gakusei {
-	int sansu;  //算数の点
-public:
-	//引数なしのコンストラクタ（これがないとプログラムはエラー）
-	Gakusei() {}  //何もしないので、中カッコ内は空
-	//引数ありのコンストラクタ
-	Gakusei(int x) { set_sansu(x); }
-	void set_sansu(int x);
-	int get_sansu() const { return sansu; }
-	void input();    //入力のために新しく付けた
+const int INF = 100000000;
+const int MAX_N = 100;
+const int MAX_M = 100;
+
+typedef pair<int, int> P;
+
+char maze[MAX_N][MAX_M + 1] = {
+	"#S######.#",
+	"......#..#",
+	".#.##.##.#",
+	".#........",
+	"##.##.####",
+	"....#....#",
+	".#######.#",
+	"....#.....",
+	".####.###.",
+	"....#...G#"
 };
 
-void Gakusei::set_sansu(int x) {
-	if(x >= 100) {
-		//xが100以上の時は、100を代入してしまう。
-		x = 100;
+int N = 10, M = 10;
+int sx = 0, sy = 1;
+int gx = 9, gy = 8;
+
+int d[MAX_N][MAX_M];
+
+int dx[4] = {1, 0, -1, 0}, dy[4] = {0, 1, 0, -1};
+
+int bfs() {
+	queue<P> que;
+
+	for(int i = 0; i < N; i++)
+		for(int j = 0; j < M; j++) d[i][j] = INF;
+	que.push(P(sx, sy));
+	d[sx][sy] = 0;
+
+	while(que.size()) {
+		P p = que.front(); que.pop();
+
+		if(p.first == gx && p.second == gy) break;
+		for(int i = 0; i < 4; i++) {
+			int nx = p.first + dx[i], ny = p.second + dy[i];
+
+			if(0 <= nx && nx < N && 0 <= ny && ny < M && maze[nx][ny] != '#' && d[nx][ny] == INF) {
+				que.push(P(nx, ny));
+				d[nx][ny] = d[p.first][p.second] + 1;
+			}
+		}
 	}
-	sansu = x;
+	return d[gx][gy];
 }
 
-void Gakusei::input() {
-	int temp;
-	cout << "算数の点を入力してください：";
-	cin >> temp;
-	set_sansu(temp);
-}
-
-int main() {
-	int ninzu, sum = 0;
-	Gakusei *pm;
-	cout << "学生の人数を入力してください。" << endl;
-	cin >> ninzu;
-	pm = new Gakusei[ninzu];   //引数を取らないコンストラクタが使われる 
-	cout << ninzu << "人の学生の点数を入力してください。" << endl;
-	for(int i = 0; i < ninzu; i++) {
-		pm[i].input();
-	}
-	cout << "それでは平均を計算します。" << endl;
-	for(int i = 0; i < ninzu; i++) {
-		sum += pm[i].get_sansu();
-	}
-	cout << "平均点は" << sum / ninzu << "です。" << endl;
-	delete [] pm;
+int main(void) {
+	cout << maze[sx][sy] << endl;
+	/*int res = bfs();
+	cout << res << endl;*/
+	return 0;
 }
